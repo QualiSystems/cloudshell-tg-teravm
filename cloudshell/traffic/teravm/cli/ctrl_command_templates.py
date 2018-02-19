@@ -5,6 +5,8 @@ from cloudshell.cli.command_template.command_template import CommandTemplate
 from cloudshell.traffic.teravm.exceptions import TestGroupDoesNotExist
 
 
+LICENSE_SERVER_PORT = 5053
+LICENSE_SERVER_WEB_INTERFACE_PORT = 5054
 DEFAULT_ERROR_MAP = OrderedDict((("ERROR:", "Error happens while executing CLI command"),
                                  ("Could not check out the required", "Failed to acquire teravm license")))
 
@@ -60,5 +62,9 @@ SAVE_RESULTS = CommandTemplate("saveTestGroupHistoricalDetailedResults {test_gro
                                                                           "you have loaded configuration"),
                                     (r"There is no current or last run", "There are no stats available for Export. "
                                                                          "Be sure that you have started tests")))))
+
+CONFIGURE_LICENSE_SERVER = CommandTemplate("configureTvmLicensing LicenseServer {license_server_ip} %s %s"
+                                           % (LICENSE_SERVER_PORT, LICENSE_SERVER_WEB_INTERFACE_PORT),
+                                           error_map=prepare_error_map())
 
 REMOVE_FILE = CommandTemplate("rm {file_name}")
