@@ -67,4 +67,7 @@ CONFIGURE_LICENSE_SERVER = CommandTemplate("configureTvmLicensing LicenseServer 
                                            % (LICENSE_SERVER_PORT, LICENSE_SERVER_WEB_INTERFACE_PORT),
                                            error_map=prepare_error_map())
 
+OPEN_AUTOMATION_AUTHORIZATION = CommandTemplate("cli -u {test_user} openAutomationAuthorizationSession",
+                                                error_map=prepare_error_map())
+
 REMOVE_FILE = CommandTemplate("rm {file_name}")
