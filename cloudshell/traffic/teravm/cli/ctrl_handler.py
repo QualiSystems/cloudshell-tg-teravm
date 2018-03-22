@@ -28,10 +28,10 @@ class TeraVMControllerCliHandler(CliHandlerImpl):
         :return:
         """
         # open automation authorization if needed
-        if self.resource_config.test_user_password:
-            test_password = self._api.DecryptPassword(self.resource_config.test_user_password).Value
-            cli_service = CliServiceImpl(session=session, command_mode=self.default_mode, logger=logger)
+        test_password = self._api.DecryptPassword(self.resource_config.test_user_password).Value
 
+        if test_password:
+            cli_service = CliServiceImpl(session=session, command_mode=self.default_mode, logger=logger)
             command = CommandTemplateExecutor(cli_service=cli_service,
                                               command_template=ctrl_command_templates.OPEN_AUTOMATION_AUTHORIZATION,
                                               action_map={
