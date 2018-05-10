@@ -9,16 +9,18 @@ from cloudshell.traffic.teravm.cli.ctrl_command_modes import DefaultCommandMode
 
 
 class TeraVMControllerCliHandler(CliHandlerImpl):
-    def __init__(self, cli, resource_config, logger, api):
+    def __init__(self, cli, resource_config, logger, api, open_automation_auth=True):
         """
 
         :param cloudshell.cli.cli.CLI cli: CLI object
         :param traffic.teravm.controller.configuration_attributes_structure.TrafficGeneratorControllerResource resource_config:
         :param logging.Logger logger:
         :param cloudshell.api.cloudshell_api.CloudShellAPISession api: cloudshell API object
+        :param bool enable_open_automation_auth:
         """
         super(TeraVMControllerCliHandler, self).__init__(cli, resource_config, logger, api)
         self._modes = CommandModeHelper.create_command_mode()
+        self._open_automation_auth = open_automation_auth
 
     def on_session_start(self, session, logger):
         """
@@ -28,19 +30,21 @@ class TeraVMControllerCliHandler(CliHandlerImpl):
         :return:
         """
         # open automation authorization if needed
-        test_password = self._api.DecryptPassword(self.resource_config.test_user_password).Value
+        if self._open_automation_auth:
+            self._logger.info("Open Automation Authorization")
+            test_password = self._api.DecryptPassword(self.resource_config.test_user_password).Value
 
-        if test_password:
-            cli_service = CliServiceImpl(session=session, command_mode=self.default_mode, logger=logger)
-            command = CommandTemplateExecutor(cli_service=cli_service,
-                                              command_template=ctrl_command_templates.OPEN_AUTOMATION_AUTHORIZATION,
-                                              action_map={
-                                                  "[Pp]assword for user":
-                                                      lambda session, logger: session.send_line(
-                                                          test_password, logger)
-                                              })
+            if test_password:
+                cli_service = CliServiceImpl(session=session, command_mode=self.default_mode, logger=logger)
+                command = CommandTemplateExecutor(cli_service=cli_service,
+                                                  command_template=ctrl_command_templates.OPEN_AUTOMATION_AUTHORIZATION,
+                                                  action_map={
+                                                      "[Pp]assword for user":
+                                                          lambda session, logger: session.send_line(
+                                                              test_password, logger)
+                                                  })
 
-            command.execute_command(test_user=self.resource_config.test_user)
+                command.execute_command(test_user=self.resource_config.test_user)
 
     @property
     def default_mode(self):
