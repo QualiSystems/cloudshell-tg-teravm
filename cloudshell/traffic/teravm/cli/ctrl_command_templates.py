@@ -8,7 +8,8 @@ from cloudshell.traffic.teravm.exceptions import TestGroupDoesNotExist
 LICENSE_SERVER_PORT = 5053
 LICENSE_SERVER_WEB_INTERFACE_PORT = 5054
 DEFAULT_ERROR_MAP = OrderedDict((("ERROR:", "Error happens while executing CLI command"),
-                                 ("Could not check out the required", "Failed to acquire teravm license")))
+                                 ("Could not check out the required", "Failed to acquire teravm license"),
+                                 ("[F]atal [E]rror", "Error happens while executing CLI command")))
 
 
 def raise_test_group_exception(session, logger):
