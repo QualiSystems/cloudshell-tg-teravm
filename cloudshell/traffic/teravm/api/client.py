@@ -178,13 +178,12 @@ class TeraVMClient(object):
         :return:
         """
         try:
-            resp = self._do_get(path="login/settings.html", raise_for_status=False)
+            resp = self._do_get(path="v1/legacy-ui/ui/index.html", raise_for_status=False)
         except requests.exceptions.ConnectionError:
             logger.info("API Service did not started yet", exc_info=True)
             return False
 
-        # todo: "v1/legacy-ui/application/settings" - check this URL !!!
-        return resp.status_code == httplib.OK and "executive management ip" in resp.content.lower()
+        return resp.status_code == httplib.OK and "not currently available" not in resp.content.lower()
 
     @auth_required
     def configure_executive_server(self, ip_addr):
@@ -195,3 +194,8 @@ class TeraVMClient(object):
 
         resp = self._do_post(path="v1/legacy-ui/application/settings/executive-ip", data=data)
         return resp
+
+
+if __name__ == "__main__":
+    cl = TeraVMClient(address="192.168.42.217", user="nomatter", password="nomatter")
+    cl.get_modules_info()
