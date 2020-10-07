@@ -178,12 +178,12 @@ class TeraVMClient(object):
         :return:
         """
         try:
-            resp = self._do_get(path="v1/legacy-ui/ui/index.html", raise_for_status=False)
+            resp = self._do_get(path="v1/legacy-ui/application/details", raise_for_status=False)
         except requests.exceptions.ConnectionError:
             logger.info("API Service did not started yet", exc_info=True)
             return False
 
-        return resp.status_code == httplib.OK and "not currently available" not in resp.content.lower()
+        return resp.status_code == httplib.OK
 
     @auth_required
     def configure_executive_server(self, ip_addr):
